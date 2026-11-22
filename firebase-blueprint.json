@@ -1,0 +1,175 @@
+{
+  "entities": {
+    "PublicUserProfile": {
+      "title": "PublicUserProfile",
+      "description": "Publicly searchable user profile without PII",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "displayName": { "type": "string", "description": "User display name" },
+        "username": { "type": "string", "description": "Lowercase searchable handle" },
+        "photoUrl": { "type": "string", "description": "Profile avatar URL" },
+        "bio": { "type": "string", "description": "Short user bio" },
+        "status": { "type": "string", "description": "Online or custom status text" },
+        "searchable": { "type": "boolean", "description": "Whether profile appears in user search" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp" }
+      },
+      "required": ["uid", "displayName", "username", "searchable", "createdAt", "updatedAt"]
+    },
+    "PrivateUserAccount": {
+      "title": "PrivateUserAccount",
+      "description": "Owner-only private profile with email, phone, and browser preferences",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "Owner UID" },
+        "displayName": { "type": "string", "description": "Display name" },
+        "username": { "type": "string", "description": "Handle" },
+        "email": { "type": "string", "description": "Account email" },
+        "phoneNumber": { "type": "string", "description": "Optional contact phone number" },
+        "photoUrl": { "type": "string", "description": "Avatar URL" },
+        "bio": { "type": "string", "description": "User bio" },
+        "status": { "type": "string", "description": "User status" },
+        "defaultSearchEngine": { "type": "string", "description": "Preferred browser search engine" },
+        "darkModeWeb": { "type": "boolean", "description": "Whether web pages prefer dark rendering" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "displayName", "username", "defaultSearchEngine", "darkModeWeb", "createdAt", "updatedAt"]
+    },
+    "BrowserBookmark": {
+      "title": "BrowserBookmark",
+      "description": "Cloud-synced browser bookmark",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "url": { "type": "string" },
+        "category": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "title", "url", "createdAt", "updatedAt"]
+    },
+    "BrowserHistoryEntry": {
+      "title": "BrowserHistoryEntry",
+      "description": "Cloud-synced browsing history record",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "url": { "type": "string" },
+        "visitedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "title", "url", "visitedAt"]
+    },
+    "Conversation": {
+      "title": "Conversation",
+      "description": "1-to-1, group chat, or in-app SMS thread",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "groupChat": { "type": "boolean" },
+        "participantUids": { "type": "array" },
+        "participantSummary": { "type": "string" },
+        "createdBy": { "type": "string" },
+        "lastMessageText": { "type": "string" },
+        "lastMessageType": { "type": "string" },
+        "lastSenderUid": { "type": "string" },
+        "lastMessageAt": { "type": "string", "format": "date-time" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "groupChat", "participantUids", "createdBy", "lastMessageText", "lastMessageType", "lastSenderUid", "createdAt", "updatedAt"]
+    },
+    "ChatMessage": {
+      "title": "ChatMessage",
+      "description": "Message inside a conversation with denormalized participantUids",
+      "type": "object",
+      "properties": {
+        "conversationId": { "type": "string" },
+        "senderUid": { "type": "string" },
+        "senderName": { "type": "string" },
+        "participantUids": { "type": "array" },
+        "messageType": { "type": "string", "enum": ["TEXT", "IMAGE", "VOICE", "FILE", "WEB_SHARE", "SMS_NOTE"] },
+        "text": { "type": "string" },
+        "mediaUrl": { "type": "string" },
+        "sharedTitle": { "type": "string" },
+        "fileName": { "type": "string" },
+        "durationSec": { "type": "integer" },
+        "readBy": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["conversationId", "senderUid", "senderName", "participantUids", "messageType", "text", "readBy", "createdAt", "updatedAt"]
+    },
+    "CallSession": {
+      "title": "CallSession",
+      "description": "Voice, video, or group call room (up to 8 participants)",
+      "type": "object",
+      "properties": {
+        "callerUid": { "type": "string" },
+        "callerName": { "type": "string" },
+        "callType": { "type": "string", "enum": ["VOICE", "VIDEO", "GROUP_VOICE", "GROUP_VIDEO"] },
+        "status": { "type": "string", "enum": ["RINGING", "ACTIVE", "ENDED", "DECLINED"] },
+        "participantUids": { "type": "array" },
+        "activeUids": { "type": "array" },
+        "title": { "type": "string" },
+        "sdpOffer": { "type": "string" },
+        "sdpAnswer": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["callerUid", "callerName", "callType", "status", "participantUids", "activeUids", "title", "createdAt", "updatedAt"]
+    },
+    "CallHistoryEntry": {
+      "title": "CallHistoryEntry",
+      "description": "User-scoped call log entry",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "peerName": { "type": "string" },
+        "callType": { "type": "string" },
+        "direction": { "type": "string" },
+        "status": { "type": "string" },
+        "durationSec": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "peerName", "callType", "direction", "status", "durationSec", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users_public/{userId}": {
+      "schema": { "$ref": "#/entities/PublicUserProfile" },
+      "description": "Publicly searchable directory cards without PII"
+    },
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/PrivateUserAccount" },
+      "description": "Private user account and browser preferences"
+    },
+    "/users/{userId}/bookmarks/{bookmarkId}": {
+      "schema": { "$ref": "#/entities/BrowserBookmark" },
+      "description": "User bookmarks"
+    },
+    "/users/{userId}/history/{historyId}": {
+      "schema": { "$ref": "#/entities/BrowserHistoryEntry" },
+      "description": "User browsing history"
+    },
+    "/conversations/{conversationId}": {
+      "schema": { "$ref": "#/entities/Conversation" },
+      "description": "1-to-1 and group chats"
+    },
+    "/conversations/{conversationId}/messages/{messageId}": {
+      "schema": { "$ref": "#/entities/ChatMessage" },
+      "description": "Chat messages with denormalized participantUids"
+    },
+    "/calls/{callId}": {
+      "schema": { "$ref": "#/entities/CallSession" },
+      "description": "Active and historical voice/video/group call signaling rooms"
+    },
+    "/users/{userId}/call_history/{entryId}": {
+      "schema": { "$ref": "#/entities/CallHistoryEntry" },
+      "description": "Per-user call log"
+    }
+  }
+}

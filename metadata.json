@@ -1,0 +1,6 @@
+{
+  "name": "Orbit Browser",
+  "description": "International Android web browser with built-in AI assistant, Google accounts, real-time messaging, and voice/video calling.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
